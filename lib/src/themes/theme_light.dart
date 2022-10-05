@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ThemeLight {
+
   static const Color colorPrimary = Color(0xffED1D24);
 
   static const Color colorCardPeli = Colors.red;

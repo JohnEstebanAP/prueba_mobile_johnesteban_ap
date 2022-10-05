@@ -42,7 +42,7 @@ class Comic {
   String? title;
   int? issueNumber;
   String? variantDescription;
-  dynamic? description;
+  String? description;
   String? modified;
   String? isbn;
   String? upc;

@@ -1,3 +1,5 @@
+export 'package:prueba_mobile_johnesteban_ap/src/widgets/poster_and_title.dart';
+export 'package:prueba_mobile_johnesteban_ap/src/widgets/CustomAppBar.dart';
 export 'package:prueba_mobile_johnesteban_ap/src/widgets/comics_slider.dart';
 export 'package:prueba_mobile_johnesteban_ap/src/widgets/card_swiper.dart';
 export 'package:prueba_mobile_johnesteban_ap/src/widgets/ButtonStart.dart';
