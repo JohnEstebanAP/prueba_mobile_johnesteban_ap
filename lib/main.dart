@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:prueba_mobile_johnesteban_ap/src/providers/ui_provider.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/screens/screens.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/services/auth_service.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/services/comics_service.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/themes/theme_light.dart';
 
-void main() => runApp(AppState());
+void main() => runApp(const AppState());
 
 class AppState extends StatelessWidget {
   const AppState({Key? key}) : super(key: key);
@@ -14,6 +15,7 @@ class AppState extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => UiProvider()),
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => ComicsService()),
       ],
@@ -33,7 +35,6 @@ class MyApp extends StatelessWidget {
         'login': (_) => const LoginScreen(),
         'home': (_) => const HomeScreen(),
         'details': (_) => const DetailsComicScreen(),
-        // 'product': (_) => ProductScreen(),
         'register': (_) => const RegisterScreen(),
         'checking': (_) => const CheckAutnScreen(),
       },

@@ -11,7 +11,6 @@ class DetailsComicScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final Comic comic = ModalRoute.of(context)!.settings.arguments as Comic;
 
     return Scaffold(
@@ -22,11 +21,13 @@ class DetailsComicScreen extends StatelessWidget {
             delegate: SliverChildListDelegate([
               PosterAndTitle(comic: comic),
               _Description(comic: comic),
-              ComicVariantsSlider(
-                title: 'Variants',
-                comic: comic,
-                onNextPage: () => {},
-              ),
+              (comic.variants!.isNotEmpty)
+                  ? ComicVariantsSlider(
+                      title: 'Variants',
+                      comic: comic,
+                      onNextPage: () => {},
+                    )
+                  : const SizedBox(),
             ]),
           ),
         ],
