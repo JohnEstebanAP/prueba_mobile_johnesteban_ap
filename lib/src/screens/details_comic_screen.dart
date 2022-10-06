@@ -14,7 +14,7 @@ class DetailsComicScreen extends StatelessWidget {
     final Comic comic = ModalRoute.of(context)!.settings.arguments as Comic;
 
     return Scaffold(
-      backgroundColor: ThemeDark.colorDard ,
+      backgroundColor: ThemeDark.colorDard,
       body: CustomScrollView(
         slivers: [
           CustomAppBar(comic: comic),
@@ -22,6 +22,13 @@ class DetailsComicScreen extends StatelessWidget {
             delegate: SliverChildListDelegate([
               PosterAndTitle(comic: comic),
               _Description(comic: comic),
+              (comic.variants!.isNotEmpty)
+                  ? ComicVariantsSlider(
+                      title: 'Variants',
+                      comic: comic,
+                      onNextPage: () => {},
+                    )
+                  : const SizedBox(),
               (comic.variants!.isNotEmpty)
                   ? ComicVariantsSlider(
                       title: 'Variants',
