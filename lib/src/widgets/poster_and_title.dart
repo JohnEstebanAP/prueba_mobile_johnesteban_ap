@@ -39,25 +39,38 @@ class PosterAndTitle extends StatelessWidget {
                     style: textTheme.headline5,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.monetization_on,
-                      size: 15,
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      'Price: \$${comic.prices?[0].price ?? 0} USD',
-                      style: textTheme.caption,
-                    )
-                  ],
-                )
+                _InfoCuston(textTheme, Icons.monetization_on,
+                    'Price: \$${comic.prices?[0].price ?? 0} USD'),
+                _InfoCuston(textTheme, Icons.insert_drive_file_sharp,
+                    'Pages Count: ${comic.pageCount}.'),
               ],
             ),
           )
         ],
       ),
+    );
+  }
+
+  Row _InfoCuston(TextTheme textTheme, IconData icon, String text) {
+    return Row(
+      children: [
+        (comic.prices?[0].price != 0)
+            ? Icon(
+                icon,
+                size: 15,
+                color: Colors.grey,
+              )
+            : const SizedBox(),
+        (comic.prices?[0].price != 0)
+            ? const SizedBox(width: 5)
+            : const SizedBox(),
+        (comic.prices?[0].price != 0)
+            ? Text(
+                text,
+                style: textTheme.caption,
+              )
+            : const SizedBox(),
+      ],
     );
   }
 }

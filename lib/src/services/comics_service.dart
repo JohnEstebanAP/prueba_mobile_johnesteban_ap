@@ -5,17 +5,24 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/models/comic.dart';
 import 'package:http/http.dart' as http;
 import 'package:prueba_mobile_johnesteban_ap/src/widgets/toast.dart';
+import 'package:crypto/crypto.dart';
 
 class ComicsService extends ChangeNotifier {
   final String _baseUrl = 'gateway.marvel.com';
   final String _bodyUrl = '/v1/public/comics';
-  final String _apikey = 'ab172c13e5eadcee42116f385af2efc5';
-  final String _hash = 'c2d346f9a5e7e323b16c545d6a5f6e15';
-  final String _ts = '1';
+  final String _apikey = '91ef740484931a27809c93d3d4cc5cec';
+  final String _privateKey = 'e0820a51f547642261e4d1f53bbf0423a4bcc39b';
+
+  final String _apikey2 = 'ab172c13e5eadcee42116f385af2efc5';
+  final String _hash2 = 'c2d346f9a5e7e323b16c545d6a5f6e15';
+
+  String _hash = '';
+  String _ts = '';
   int _curretpage = 0;
 
   List<Comic> comics = [];
   List<Comic> allComics = [];
+  Map<int, List<Comic>> _variants = {};
 
   //final List<Comic> comics = [];
   late Comic selectedComic;
@@ -32,7 +39,25 @@ class ComicsService extends ChangeNotifier {
     getnextComics();
   }
 
+  Map<int, List<Comic>> get variants {
+    return _variants;
+  }
+
+  void hash(String _privateKey, String _apikey) {
+    ts();
+    var bytes = utf8.encode('$_ts$_privateKey$_apikey');
+    var hash = md5.convert(bytes);
+    _hash = hash.toString();
+  }
+
+  ts() {
+    DateTime now = DateTime.now();
+    _ts = now.toString();
+  }
+
   Future<String> _getJsonData(String endPoint) async {
+    hash(_privateKey, _apikey);
+
     final url = Uri.http(
       _baseUrl,
       endPoint,
@@ -90,9 +115,33 @@ class ComicsService extends ChangeNotifier {
 
       allComics = [...allComics, ...allComicsResponse];
       _curretpage += 20;
-      print('pagina $_curretpage');
       isLodingSlider = false;
       notifyListeners();
     }
+  }
+
+  Future<List<Comic>> getVariantsFromComic(Comic comic) async {
+    if (_variants.containsKey(comic.id)) {
+      return _variants[comic.id]!;
+    }
+
+    List<Comic> allVariantsResponse = [];
+
+    for (var i = 0; i < comic.variants!.length; i++) {
+      List<String>? listUrlVariant = comic.variants![i].resourceUri?.split('/');
+      String idVariant = listUrlVariant![listUrlVariant.length - 1];
+
+      final response = await _getJsonData('$_bodyUrl/$idVariant');
+
+      final Map<String, dynamic> comicMap = json.decode(response)['data'];
+
+      comicMap['results'].forEach((value) {
+        final Comic tempComic = Comic.fromMap(value);
+        allVariantsResponse.add(tempComic);
+      });
+      // _variants = [..._variants, ...allVariantsResponse];
+    }
+    _variants[comic.id!] = allVariantsResponse;
+    return allVariantsResponse;
   }
 }

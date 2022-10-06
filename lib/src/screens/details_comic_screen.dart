@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/themes/theme_light.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/widgets/widgets.dart';
 
 import '../models/comic.dart';
+import '../services/comics_service.dart';
 
 class DetailsComicScreen extends StatelessWidget {
   const DetailsComicScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
     final Comic comic = ModalRoute.of(context)!.settings.arguments as Comic;
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -18,7 +22,11 @@ class DetailsComicScreen extends StatelessWidget {
             delegate: SliverChildListDelegate([
               PosterAndTitle(comic: comic),
               _Description(comic: comic),
-              //CastingCards(comic.id)
+              ComicVariantsSlider(
+                title: 'Variants',
+                comic: comic,
+                onNextPage: () => {},
+              ),
             ]),
           ),
         ],
@@ -44,10 +52,13 @@ class _Description extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _Table2SerialNumber(size, 0.8),
+            _Table2SerialNumber(size, 0.7),
+            _Table2byDescritionCustom(size, 0.7, 'Format: ', comic.format!),
             _Table2byDescritionCustom(
-                size, 0.8, 'Last modification: ', comic.modified!),
+                size, 0.7, 'Series: ', comic.series!.name!),
             _description(context),
+            _Table2byDescritionCustom(
+                size, 1, 'Last modification: ', comic.modified!),
             _Table2byDescritionCustom(size, 0.8, 'ISBN: ', comic.isbn!),
             _Table2byDescritionCustom(size, 1.0, 'Barcode UPC: ', comic.upc!)
           ],
