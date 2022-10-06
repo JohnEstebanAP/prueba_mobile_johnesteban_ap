@@ -14,7 +14,7 @@ class ComicsService extends ChangeNotifier {
   final String _privateKey = 'e0820a51f547642261e4d1f53bbf0423a4bcc39b';
 
   final String _apikey2 = 'ab172c13e5eadcee42116f385af2efc5';
-  final String _hash2 = 'c2d346f9a5e7e323b16c545d6a5f6e15';
+  final String _privateKey2 = '3b861a8e965febcdd5e101e398539806dc7efb1a';
 
   String _hash = '';
   String _ts = '';

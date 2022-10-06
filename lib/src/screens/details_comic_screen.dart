@@ -14,6 +14,7 @@ class DetailsComicScreen extends StatelessWidget {
     final Comic comic = ModalRoute.of(context)!.settings.arguments as Comic;
 
     return Scaffold(
+      backgroundColor: ThemeDark.colorDard ,
       body: CustomScrollView(
         slivers: [
           CustomAppBar(comic: comic),

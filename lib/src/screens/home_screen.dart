@@ -24,7 +24,7 @@ class HomeScreen extends StatelessWidget {
           },
         ),
       ),
-      body: const _HomePageBody(),
+      body: Stack(children: const [Background(), _HomePageBody()]),
       bottomNavigationBar: const CustomNavigatorBar(),
     );
   }
@@ -46,6 +46,8 @@ class _HomePageBody extends StatelessWidget {
         return const ComicsScreen();
       case 1:
         return const FavoritesScreen();
+      case 2:
+        return const DetailsComicScreen();
       default:
         return const ComicsScreen();
     }

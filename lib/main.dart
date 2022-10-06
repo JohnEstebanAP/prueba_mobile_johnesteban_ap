@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         'register': (_) => const RegisterScreen(),
         'checking': (_) => const CheckAutnScreen(),
       },
-      theme: ThemeLight.themeLight,
+      theme: ThemeDark.themeDark,
     );
   }
 }
