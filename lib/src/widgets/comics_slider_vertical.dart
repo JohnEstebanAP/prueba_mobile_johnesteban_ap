@@ -96,9 +96,9 @@ class _ComicPoster extends StatelessWidget {
                 child: FadeInImage(
                   placeholder: const AssetImage('assets/no-image.jpg'),
                   image: NetworkImage(
-                      '${comic.thumbnail!.path}/portrait_fantastic.${comic.thumbnail!.extension}'),
-                  width: 130,
-                  height: 190,
+                      '${comic.thumbnail!.path}/portrait_uncanny.${comic.thumbnail!.extension}'),
+                  width: 300,
+                  height: 450,
                   fit: BoxFit.cover,
                 ),
               ),
