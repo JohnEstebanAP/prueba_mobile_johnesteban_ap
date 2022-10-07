@@ -13,6 +13,10 @@ class FavoritesScreen extends StatelessWidget {
     final favoritesComicsServices =
         Provider.of<FavoritesComicsService>(context);
 
+    if (favoritesComicsServices.refres) {
+      favoritesComicsServices.loadFavorites();
+    }
+
     if (favoritesComicsServices.isLoding) return const LoadingScreen();
 
     return ComicSliderVertical(

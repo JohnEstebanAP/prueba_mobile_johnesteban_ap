@@ -12,23 +12,18 @@ class FavoritesComicsService extends ChangeNotifier {
   final String _baseUrl = 'prueba-mobile-flutter-default-rtdb.firebaseio.com';
 
   FavoritesComics favoriteComic = FavoritesComics(comics: [], user: '123');
-
-  List<FavoritesComics> favoritesComics = [];
-
-  late Comic selectedProduct;
+  List<Comic> comics = [];
 
   final storage = const FlutterSecureStorage();
 
-  List<Comic> comics = [];
-
   bool isLoding = true;
-  bool isSaving = false;
+  bool refres = false;
 
   FavoritesComicsService() {
-    loadProducts();
+    loadFavorites();
   }
 
-  Future<List<Comic>> loadProducts() async {
+  Future<List<Comic>> loadFavorites() async {
     isLoding = true;
     notifyListeners();
 
@@ -42,8 +37,12 @@ class FavoritesComicsService extends ChangeNotifier {
 
     favoriteComic = FavoritesComics.fromMap(favoritesComicsMap);
 
-    comics = await getFavoritesService.getFavoritesComic(favoriteComic.comics);
+    if (favoriteComic.comics.length != comics.length) {
+      comics =
+          await getFavoritesService.getFavoritesComic(favoriteComic.comics);
+    }
 
+    refres = false;
     isLoding = false;
     notifyListeners();
     return comics;
@@ -59,8 +58,9 @@ class FavoritesComicsService extends ChangeNotifier {
     final decodeData = json.decode(resp.body);
 
     //Actualizar la Lista de productos
-    favoritesComics.add(favoriteComic);
+    favoriteComic = FavoritesComics.fromMap(decodeData);
 
+    refres = true;
     notifyListeners();
     return favoriteComic.comics.toString();
   }
@@ -85,8 +85,9 @@ class FavoritesComicsService extends ChangeNotifier {
     final decodeData = json.decode(resp.body);
 
     //Actualizar la Lista de productos
-    favoritesComics.add(favoriteComic);
+    favoriteComic = FavoritesComics.fromMap(decodeData);
 
+    refres = true;
     notifyListeners();
     return favoriteComic.comics.toString();
   }
