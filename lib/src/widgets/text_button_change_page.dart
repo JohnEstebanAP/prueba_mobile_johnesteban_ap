@@ -19,6 +19,6 @@ class TextButtonChangePage extends StatelessWidget {
                 MaterialStateProperty.all(Colors.indigo.withOpacity(0.1)),
             shape: MaterialStateProperty.all(const StadiumBorder())),
         child: Text(title,
-            style: const TextStyle(fontSize: 18, color: Colors.black87)));
+            style: const TextStyle(fontSize: 18, color: Colors.white70)));
   }
 }

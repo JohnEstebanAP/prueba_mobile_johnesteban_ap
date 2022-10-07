@@ -40,7 +40,7 @@ class ButtonStart extends StatelessWidget {
       color: Colors.deepPurple,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
-        child: Text(loginForm.isLoading ? 'Espere' : 'Ingresar',
+        child: Text(loginForm.isLoading ? 'Wait' : 'Enter',
             style: const TextStyle(color: Colors.white)),
       ),
     );

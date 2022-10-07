@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prueba_mobile_johnesteban_ap/src/themes/theme_light.dart';
 
 class AuthBackground extends StatelessWidget {
   final Widget child;
@@ -85,9 +86,9 @@ class _PurpleBox extends StatelessWidget {
   BoxDecoration buildBoxDecoration() {
     return const BoxDecoration(
         gradient: LinearGradient(colors: [
-      Color.fromRGBO(63, 63, 156, 1),
-      Color.fromRGBO(90, 70, 178, 1)
-    ]));
+      ThemeDark.colorDard,
+      ThemeDark.colorPrimary
+        ]));
   }
 }
 
