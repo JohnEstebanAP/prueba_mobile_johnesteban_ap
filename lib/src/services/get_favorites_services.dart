@@ -14,11 +14,11 @@ import 'package:crypto/crypto.dart';
 class GetFavoritesService extends ChangeNotifier {
   final String _baseUrl = 'gateway.marvel.com';
   final String _bodyUrl = '/v1/public/comics';
-  final String _apikey2 = '91ef740484931a27809c93d3d4cc5cec';
-  final String _privateKey2 = 'e0820a51f547642261e4d1f53bbf0423a4bcc39b';
+  final String _apikey = '91ef740484931a27809c93d3d4cc5cec';
+  final String _privateKey = 'e0820a51f547642261e4d1f53bbf0423a4bcc39b';
 
-  final String _apikey = 'ab172c13e5eadcee42116f385af2efc5';
-  final String _privateKey = '3b861a8e965febcdd5e101e398539806dc7efb1a';
+  final String _apikey2 = 'ab172c13e5eadcee42116f385af2efc5';
+  final String _privateKey2 = '3b861a8e965febcdd5e101e398539806dc7efb1a';
 
   String _hash = '';
   String _ts = '';

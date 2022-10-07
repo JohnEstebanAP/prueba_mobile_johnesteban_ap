@@ -28,8 +28,6 @@ class FavoritesComicsService extends ChangeNotifier {
     loadProducts();
   }
 
-
-
   Future<List<Comic>> loadProducts() async {
     isLoding = true;
     notifyListeners();
@@ -46,16 +44,12 @@ class FavoritesComicsService extends ChangeNotifier {
 
     comics = await getFavoritesService.getFavoritesComic(favoriteComic.comics);
 
-    print('favaritos: ${favoriteComic.comics}');
     isLoding = false;
     notifyListeners();
     return comics;
   }
 
-
-
-
-  Future<String> createProduct() async {
+  Future<String> createFavorite() async {
     String userId = await storage.read(key: 'token') ?? '';
     favoriteComic.user = userId;
     final url =
@@ -63,53 +57,37 @@ class FavoritesComicsService extends ChangeNotifier {
 
     final resp = await http.put(url, body: favoriteComic.toJson());
     final decodeData = json.decode(resp.body);
-    print('Respuesta $decodeData');
 
     //Actualizar la Lista de productos
     favoritesComics.add(favoriteComic);
 
+    notifyListeners();
     return favoriteComic.comics.toString();
   }
-/*
-  void updateSelectedProductImage(String path) {
-    selectedProduct.picture = path;
-    newPictureFile = File.fromUri(Uri(path: path));
+
+  Future<String> deleteFavorite(int idfavoriteDelete) async {
+    List<int> favorites = [];
+
+    favoriteComic.comics.forEach((favorite) {
+      if (idfavoriteDelete != favorite) {
+        favorites.add(favorite);
+      }
+    });
+
+    favoriteComic.comics = favorites;
+
+    String userId = await storage.read(key: 'token') ?? '';
+    favoriteComic.user = userId;
+    final url =
+        Uri.https(_baseUrl, 'FavoritesComics/$userId.json', {'auth': userId});
+
+    final resp = await http.put(url, body: favoriteComic.toJson());
+    final decodeData = json.decode(resp.body);
+
+    //Actualizar la Lista de productos
+    favoritesComics.add(favoriteComic);
+
     notifyListeners();
+    return favoriteComic.comics.toString();
   }
-
-  Future<String?> uploadImage() async {
-    if (newPictureFile == null) return null;
-
-    isSaving = true;
-    notifyListeners();
-
-    final url = Uri.parse(
-        'https://api.cloudinary.com/v1_1/dnsgy2ht5/image/upload?upload_preset=cqa69qhx');
-
-    //creamos la peticion
-    final imageUploadRequest = http.MultipartRequest('POST', url);
-    //ajuntamos el archivo
-    final file =
-        await http.MultipartFile.fromPath('file', newPictureFile!.path);
-
-    //agegamos el file a la peticion
-    imageUploadRequest.files.add(file);
-
-    final streamResponse = await imageUploadRequest.send();
-    final resp = await http.Response.fromStream(streamResponse);
-
-    if (resp.statusCode != 200 && resp.statusCode != 201) {
-      print('algo salio mal');
-      print(resp.body);
-      return null;
-    }
-
-    //lo colocamos en null para indicar que lla lo subimos y no nesecitamo esa propiedad
-    newPictureFile = null;
-
-    final decodedData = json.decode(resp.body);
-    return decodedData['secure_url'];
-  }
-
- */
 }

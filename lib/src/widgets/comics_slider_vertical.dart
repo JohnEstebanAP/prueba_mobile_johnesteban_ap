@@ -14,7 +14,7 @@ class ComicSliderVertical extends StatefulWidget {
 }
 
 class _MovieSliderState extends State<ComicSliderVertical> {
-  final ScrollController scrollController = new ScrollController();
+  final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -78,7 +78,7 @@ class _ComicPoster extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    comic.id = comicId;
+    comic.idTap = '$comicId - 3';
 
     var size = MediaQuery.of(context).size;
     return Container(
@@ -90,7 +90,7 @@ class _ComicPoster extends StatelessWidget {
             onTap: () =>
                 Navigator.pushNamed(context, 'details', arguments: comic),
             child: Hero(
-              tag: comic.id!,
+              tag: comic.idTap!,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: FadeInImage(

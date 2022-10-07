@@ -13,28 +13,30 @@ class CustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final favoritesComics = Provider.of<FavoritesComicsService>(context);
 
     Icon icon = const Icon(Icons.favorite);
     if (favoritesComics.favoriteComic.comics.contains(comic.id)) {
       icon = const Icon(Icons.favorite, color: ThemeDark.colorPrimary);
-      print('Si lo contiene');
+
     }
-    print('No lo contiene');
 
     return SliverAppBar(
       actions: [
         IconButton(
           onPressed: () {
-            favoritesComics.favoriteComic.comics.add(comic.id!);
-            favoritesComics.createProduct();
+            if (!favoritesComics.favoriteComic.comics.contains(comic.id)) {
+              favoritesComics.favoriteComic.comics.add(comic.id!);
+              favoritesComics.createFavorite();
+            } else {
+              favoritesComics.deleteFavorite(comic.id!);
+            }
           },
           icon: icon,
         ),
         IconButton(
           onPressed: () {
-            Share.share(comic!.urls!.first!.url ??
+            Share.share(comic.urls!.first.url ??
                 'https://www.marvel.com/comics?&options%5Boffset%5D=0&totalcount=12');
           },
           icon: const Icon(Icons.share_outlined),
