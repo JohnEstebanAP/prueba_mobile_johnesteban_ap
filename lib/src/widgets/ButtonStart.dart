@@ -53,7 +53,7 @@ class ButtonStart extends StatelessWidget {
         await authService.createUser(loginForm.email, loginForm.password);
 
     if (errorMessage == null) {
-      ToastCuston.LikeToast("Felicidades por su nueva cuenta :)");
+      ToastCuston.LikeToast("Congratulations on your new account :)");
       Navigator.pushReplacementNamed(context, 'home');
     } else {
       //Todo: mostrar error en pantalla
@@ -71,7 +71,7 @@ class ButtonStart extends StatelessWidget {
       Navigator.pushReplacementNamed(context, 'home');
     } else {
       //Todo: mostrar error en pantalla
-      ToastCuston.ErrorToast('El Correo no es valido.');
+      ToastCuston.ErrorToast('Email is not valid.');
     }
   }
 }

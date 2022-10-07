@@ -39,6 +39,7 @@ class Comic {
     this.events,
   });
 
+  String? idTap;
   int? id;
   int? digitalId;
   String? title;
@@ -179,30 +180,28 @@ class Comic {
       DateTime parsedDate = DateTime.parse(date.date!);
       String fecha = formatter.format(parsedDate);
 
-      if(dateString.isEmpty){
+      if (dateString.isEmpty) {
         dateString = fecha;
-      }else{
+      } else {
         dateString = '$dateString  -  $fecha';
       }
-
     });
 
     return dateString;
   }
 
-  String get getModified{
+  String get getModified {
     String dateString = '';
     var formatter = new DateFormat('yyy-MM-dd');
 
     DateTime parsedDate = DateTime.parse(modified!);
-      String fecha = formatter.format(parsedDate);
+    String fecha = formatter.format(parsedDate);
 
-      if(dateString.isEmpty){
-        dateString = fecha;
-      }else{
-        dateString = '$dateString  -  $fecha';
-      }
-
+    if (dateString.isEmpty) {
+      dateString = fecha;
+    } else {
+      dateString = '$dateString  -  $fecha';
+    }
 
     return dateString;
   }

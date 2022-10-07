@@ -102,7 +102,7 @@ class _TextFromFielPassword extends StatelessWidget {
       obscureText: true,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecorations.authInputDecoration(
-        labelText: 'Contraseña',
+        labelText: 'Password',
         hintText: '***********',
         prefixIcon: Icons.lock_outline,
       ),
@@ -110,7 +110,7 @@ class _TextFromFielPassword extends StatelessWidget {
       validator: (value) {
         return (value != null && value.length >= 6)
             ? null
-            : 'La contraseña debe de ser de 6 caracteres.';
+            : 'The password must be 6 characters long.';
       },
     );
   }
@@ -131,7 +131,7 @@ class _TextFromFieldEmail extends StatelessWidget {
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecorations.authInputDecoration(
-          labelText: 'Correo electronico',
+          labelText: 'E-mail address',
           hintText: 'john.alvarez@sofka.com.co',
           prefixIcon: Icons.alternate_email),
       onChanged: (value) => {loginForm.email = value},
@@ -142,7 +142,7 @@ class _TextFromFieldEmail extends StatelessWidget {
 
         return regExp.hasMatch(value ?? '')
             ? null
-            : 'El valor ingresado no luce como un correo';
+            : 'The value entered does not look like a mailing.';
       },
     );
   }

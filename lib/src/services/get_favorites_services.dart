@@ -12,8 +12,6 @@ import 'package:prueba_mobile_johnesteban_ap/src/widgets/toast.dart';
 import 'package:crypto/crypto.dart';
 
 class GetFavoritesService extends ChangeNotifier {
-
-
   final String _baseUrl = 'gateway.marvel.com';
   final String _bodyUrl = '/v1/public/comics';
   final String _apikey2 = '91ef740484931a27809c93d3d4cc5cec';
@@ -77,18 +75,16 @@ class GetFavoritesService extends ChangeNotifier {
     }
 
     for (var i = 0; i < comics.length; i++) {
-      final response = await _getJsonData('$_bodyUrl/${comics[i]}');
+      final response = await _getJsonData('$_bodyUrl/${comics[i].toString()}');
       final Map<String, dynamic> comicMap = json.decode(response)['data'];
 
       comicMap['results'].forEach((value) {
         final Comic tempComic = Comic.fromMap(value);
-
         favoritesComics.add(tempComic);
       });
     }
-
     isLodingSlider = false;
-    notifyListeners();
+    //notifyListeners();
     return favoritesComics;
   }
 }

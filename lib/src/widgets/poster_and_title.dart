@@ -18,7 +18,7 @@ class PosterAndTitle extends StatelessWidget {
       child: Row(
         children: [
           Hero(
-            tag: comic.id!,
+            tag: comic.idTap!,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: FadeInImage(

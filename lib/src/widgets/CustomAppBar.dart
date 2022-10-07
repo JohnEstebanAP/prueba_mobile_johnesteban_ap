@@ -1,3 +1,6 @@
+import 'package:provider/provider.dart';
+import 'package:prueba_mobile_johnesteban_ap/src/services/services.dart';
+
 import '../models/comic.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
@@ -10,22 +13,29 @@ class CustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final favoritesComics = Provider.of<FavoritesComicsService>(context);
+
     Icon icon = const Icon(Icons.favorite);
+    if (favoritesComics.favoriteComic.comics.contains(comic.id)) {
+      icon = const Icon(Icons.favorite, color: ThemeDark.colorPrimary);
+      print('Si lo contiene');
+    }
+    print('No lo contiene');
 
     return SliverAppBar(
       actions: [
         IconButton(
           onPressed: () {
-            icon = const Icon(
-              Icons.favorite,
-              color: ThemeDark.colorPrimary,
-            );
+            favoritesComics.favoriteComic.comics.add(comic.id!);
+            favoritesComics.createProduct();
           },
           icon: icon,
         ),
         IconButton(
           onPressed: () {
-            Share.share(comic!.urls!.first!.url?? 'https://www.marvel.com/comics?&options%5Boffset%5D=0&totalcount=12');
+            Share.share(comic!.urls!.first!.url ??
+                'https://www.marvel.com/comics?&options%5Boffset%5D=0&totalcount=12');
           },
           icon: const Icon(Icons.share_outlined),
         ),

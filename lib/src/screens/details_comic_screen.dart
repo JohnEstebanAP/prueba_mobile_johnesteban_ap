@@ -79,7 +79,7 @@ class _Description extends StatelessWidget {
       child: Text(
         comic.description ?? '',
         textAlign: TextAlign.justify,
-        style:  Theme.of(context).textTheme.subtitle1,
+        style: Theme.of(context).textTheme.subtitle1,
       ),
     );
   }

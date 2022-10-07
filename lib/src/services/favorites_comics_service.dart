@@ -11,7 +11,10 @@ class FavoritesComicsService extends ChangeNotifier {
 
   final String _baseUrl = 'prueba-mobile-flutter-default-rtdb.firebaseio.com';
 
-  FavoritesComics favoriteComis = FavoritesComics(comics: [], user: '123');
+  FavoritesComics favoriteComic = FavoritesComics(comics: [], user: '123');
+
+  List<FavoritesComics> favoritesComics = [];
+
   late Comic selectedProduct;
 
   final storage = const FlutterSecureStorage();
@@ -25,6 +28,8 @@ class FavoritesComicsService extends ChangeNotifier {
     loadProducts();
   }
 
+
+
   Future<List<Comic>> loadProducts() async {
     isLoding = true;
     notifyListeners();
@@ -37,60 +42,35 @@ class FavoritesComicsService extends ChangeNotifier {
 
     final Map<String, dynamic> favoritesComicsMap = json.decode(resp.body);
 
-    favoriteComis = FavoritesComics.fromMap(favoritesComicsMap);
+    favoriteComic = FavoritesComics.fromMap(favoritesComicsMap);
 
-    //tempProduct.id = key;
+    comics = await getFavoritesService.getFavoritesComic(favoriteComic.comics);
 
-    comics = await getFavoritesService.getFavoritesComic(favoriteComis.comics);
-
+    print('favaritos: ${favoriteComic.comics}');
     isLoding = false;
     notifyListeners();
     return comics;
   }
-/*
-  Future saveOrCreateProduct(Product product) async {
-    isSaving = true;
-    notifyListeners();
 
-    if (product.id == null) {
-      //es necesario crear
-      await createProduct(product);
-    } else {
-      //Actualizar
-      await updateProducto(product);
-    }
 
-    isSaving = false;
-    notifyListeners();
-  }
 
-  Future<String> updateProducto(Product product) async {
-    final url = Uri.https(_baseUrl, 'product/${product.id}.json');
-    final resp = await http.put(url, body: product.toJson());
-    final decodeData = resp.body;
-    //print(decodeData);
 
-    //Actualizar la Lista de productos
-    final index = products.indexWhere((element) => element.id == product.id);
-    products[index] = product;
+  Future<String> createProduct() async {
+    String userId = await storage.read(key: 'token') ?? '';
+    favoriteComic.user = userId;
+    final url =
+        Uri.https(_baseUrl, 'FavoritesComics/$userId.json', {'auth': userId});
 
-    return product.id ?? '';
-  }
-
-  Future<String> createProduct(Product product) async {
-    final url = Uri.https(_baseUrl, 'product/${product.id}.json',
-        {'auth': await storage.read(key: 'token') ?? ''});
-    final resp = await http.post(url, body: product.toJson());
+    final resp = await http.put(url, body: favoriteComic.toJson());
     final decodeData = json.decode(resp.body);
-    //print(decodeData);
+    print('Respuesta $decodeData');
 
     //Actualizar la Lista de productos
-    product.id = decodeData['name'];
-    products.add(product);
+    favoritesComics.add(favoriteComic);
 
-    return product.id ?? '';
+    return favoriteComic.comics.toString();
   }
-
+/*
   void updateSelectedProductImage(String path) {
     selectedProduct.picture = path;
     newPictureFile = File.fromUri(Uri(path: path));

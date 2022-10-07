@@ -74,7 +74,7 @@ class _ComicPoster extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    comic.id = comicId;
+    comic.idTap = '${comic.id!}-2';
 
     return Container(
       width: 130,
@@ -86,7 +86,7 @@ class _ComicPoster extends StatelessWidget {
             onTap: () =>
                 Navigator.pushNamed(context, 'details', arguments: comic),
             child: Hero(
-              tag: comic.id!,
+              tag: comic.idTap!,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: FadeInImage(

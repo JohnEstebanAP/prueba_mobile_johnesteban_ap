@@ -32,13 +32,13 @@ class CardSwiper extends StatelessWidget {
         itemBuilder: (_, int index) {
           final Comic comic = comics[index];
 
-          comic.id = (comic.id! + 100000);
+          comic.idTap = '${comic.id!}-1';
 
           return GestureDetector(
             onTap: () =>
                 Navigator.pushNamed(context, 'details', arguments: comic),
             child: Hero(
-              tag: comic.id!,
+              tag: comic.idTap!,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(30),
                 child: FadeInImage(
