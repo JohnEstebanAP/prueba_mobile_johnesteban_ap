@@ -22,17 +22,17 @@ class DetailsComicScreen extends StatelessWidget {
             delegate: SliverChildListDelegate([
               PosterAndTitle(comic: comic),
               _Description(comic: comic),
+              (comic.characters!.items!.isNotEmpty)
+                  ? ComicsExtrasSlider(title: 'Characters', comic: comic)
+                  : const SizedBox(),
               (comic.variants!.isNotEmpty)
-                  ? ComicsExtrasSlider(
-                      title: 'Variants',
-                      comic: comic,
-                    )
+                  ? ComicsExtrasSlider(title: 'Variants', comic: comic)
+                  : const SizedBox(),
+              (comic.stories!.items!.isNotEmpty)
+                  ? ComicsExtrasSlider(title: 'Stories', comic: comic)
                   : const SizedBox(),
               (comic.creators!.items!.isNotEmpty)
-                  ? ComicsExtrasSlider(
-                      title: 'Creators',
-                      comic: comic,
-                    )
+                  ? ComicsExtrasSlider(title: 'Creators', comic: comic)
                   : const SizedBox(),
             ]),
           ),
@@ -59,15 +59,16 @@ class _Description extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _Table2SerialNumber(size, 0.7),
-            _Table2byDescritionCustom(size, 0.7, 'Format: ', comic.format!),
+            _Table2SerialNumber(size, 0.8),
+            _Table2byDescritionCustom(size, 0.8, 'Published: ', comic.getDates),
             _Table2byDescritionCustom(
-                size, 0.7, 'Series: ', comic.series!.name!),
+                size, 0.8, 'Last modification: ', comic.getModified),
+            _Table2byDescritionCustom(size, 0.8, 'Format: ', comic.format!),
+            _Table2byDescritionCustom(
+                size, 0.8, 'Series: ', comic.series!.name!),
             _description(context),
-            _Table2byDescritionCustom(
-                size, 1, 'Last modification: ', comic.modified!),
             _Table2byDescritionCustom(size, 0.8, 'ISBN: ', comic.isbn!),
-            _Table2byDescritionCustom(size, 1.0, 'Barcode UPC: ', comic.upc!)
+            _Table2byDescritionCustom(size, 0.8, 'Barcode UPC: ', comic.upc!)
           ],
         ));
   }

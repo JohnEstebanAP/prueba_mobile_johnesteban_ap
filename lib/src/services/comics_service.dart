@@ -12,11 +12,11 @@ import 'package:crypto/crypto.dart';
 class ComicsService extends ChangeNotifier {
   final String _baseUrl = 'gateway.marvel.com';
   final String _bodyUrl = '/v1/public/comics';
-  final String _apikey = '91ef740484931a27809c93d3d4cc5cec';
-  final String _privateKey = 'e0820a51f547642261e4d1f53bbf0423a4bcc39b';
+  final String _apikey2 = '91ef740484931a27809c93d3d4cc5cec';
+  final String _privateKey2 = 'e0820a51f547642261e4d1f53bbf0423a4bcc39b';
 
-  final String _apikey2 = 'ab172c13e5eadcee42116f385af2efc5';
-  final String _privateKey2 = '3b861a8e965febcdd5e101e398539806dc7efb1a';
+  final String _apikey = 'ab172c13e5eadcee42116f385af2efc5';
+  final String _privateKey = '3b861a8e965febcdd5e101e398539806dc7efb1a';
 
   String _hash = '';
   String _ts = '';
@@ -26,6 +26,8 @@ class ComicsService extends ChangeNotifier {
   List<Comic> allComics = [];
   Map<int, List<Extras>> _variants = {};
   Map<int, List<Extras>> _creators = {};
+  Map<int, List<Extras>> _characters = {};
+  Map<int, List<Extras>> _stories = {};
 
   //final List<Comic> comics = [];
   late Comic selectedComic;
@@ -179,5 +181,66 @@ class ComicsService extends ChangeNotifier {
     }
     _creators[comic.id!] = allCreatorsResponse;
     return allCreatorsResponse;
+  }
+
+  Future<List<Extras>> getCharactersFromComic(Comic comic) async {
+    if (_characters.containsKey(comic.id)) {
+      return _characters[comic.id]!;
+    }
+
+    List<Extras> allResponse = [];
+
+    for (var i = 0; i < comic.characters!.items!.length; i++) {
+      List<String>? listUrl =
+          comic.characters!.items![i].resourceUri?.split('/');
+      String id = listUrl![listUrl.length - 1];
+
+      final response = await _getJsonData('/v1/public/characters/$id');
+      final Map<String, dynamic> comicMap = json.decode(response)['data'];
+      comicMap['results'].forEach((value) {
+        Extras extras = Extras();
+        extras.id = value["id"];
+        extras.title = value["name"];
+        extras.image =
+            '${value["thumbnail"]["path"]}/portrait_fantastic.${value["thumbnail"]["extension"]}';
+
+        allResponse.add(extras);
+      });
+    }
+    _characters[comic.id!] = allResponse;
+    return allResponse;
+  }
+
+  Future<List<Extras>> getStoriesFromComic(Comic comic) async {
+    if (_stories.containsKey(comic.id)) {
+      return _stories[comic.id]!;
+    }
+
+    List<Extras> allResponse = [];
+
+    for (var i = 0; i < comic.stories!.items!.length; i++) {
+      List<String>? listUrl = comic.stories!.items![i].resourceUri?.split('/');
+      String id = listUrl![listUrl.length - 1];
+
+      final response = await _getJsonData('/v1/public/stories/$id');
+      final Map<String, dynamic> comicMap = json.decode(response)['data'];
+      comicMap['results'].forEach((value) {
+        Extras extras = Extras();
+        extras.id = value["id"];
+        extras.title = value["title"];
+
+        if (value["thumbnail"] == null) {
+          extras.image =
+              'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/portrait_fantastic.jpg';
+        } else {
+          extras.image =
+              '${value["thumbnail"]["path"]}/portrait_fantastic.${value["thumbnail"]["extension"]}';
+        }
+
+        allResponse.add(extras);
+      });
+    }
+    _stories[comic.id!] = allResponse;
+    return allResponse;
   }
 }

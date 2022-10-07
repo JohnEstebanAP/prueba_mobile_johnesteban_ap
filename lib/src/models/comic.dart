@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+
 class Comic {
   Comic({
     this.id,
@@ -168,6 +170,42 @@ class Comic {
         variantDescription: variantDescription,
         variants: variants,
       );
+
+  String get getDates {
+    String dateString = '';
+    var formatter = new DateFormat('yyy-MM-dd');
+
+    dates!.reversed.forEach((date) {
+      DateTime parsedDate = DateTime.parse(date.date!);
+      String fecha = formatter.format(parsedDate);
+
+      if(dateString.isEmpty){
+        dateString = fecha;
+      }else{
+        dateString = '$dateString  -  $fecha';
+      }
+
+    });
+
+    return dateString;
+  }
+
+  String get getModified{
+    String dateString = '';
+    var formatter = new DateFormat('yyy-MM-dd');
+
+    DateTime parsedDate = DateTime.parse(modified!);
+      String fecha = formatter.format(parsedDate);
+
+      if(dateString.isEmpty){
+        dateString = fecha;
+      }else{
+        dateString = '$dateString  -  $fecha';
+      }
+
+
+    return dateString;
+  }
 }
 
 class Characters {

@@ -17,6 +17,10 @@ class ComicsExtrasSlider extends StatelessWidget {
     return FutureBuilder(
         future: (title! == 'Creators')
             ? comicsServise.getCreatorFromComic(comic)
+            : (title! == 'Characters')
+            ? comicsServise.getCharactersFromComic(comic)
+            : (title == 'Stories')
+            ? comicsServise.getStoriesFromComic(comic)
             : comicsServise.getVariantsFromComic(comic),
         builder: (_, AsyncSnapshot<List<Extras>> snapshot) {
           if (!snapshot.hasData) {
@@ -47,8 +51,9 @@ class ComicsExtrasSlider extends StatelessWidget {
                     physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     itemCount: extras.length,
-                    itemBuilder: (_, int index) => _ComicPoster(
-                        extras[index], (extras[index].id! + 200000)),
+                    itemBuilder: (_, int index) =>
+                        _ComicPoster(
+                            extras[index], (extras[index].id! + 200000)),
                   ),
                 ),
               ],
@@ -80,7 +85,6 @@ class _ComicPoster extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               child: FadeInImage(
                 placeholder: const AssetImage('assets/no-image.jpg'),
-                //  (extras.image == '')
                 image: NetworkImage(extras.image!),
                 width: 130,
                 height: 190,
