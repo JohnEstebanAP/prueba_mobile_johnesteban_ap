@@ -1,3 +1,4 @@
+export 'package:prueba_mobile_johnesteban_ap/src/widgets/comics_slider_vertical.dart';
 export 'package:prueba_mobile_johnesteban_ap/src/widgets/background.dart';
 export 'package:prueba_mobile_johnesteban_ap/src/widgets/custom_navigatorbar.dart';
 export 'package:prueba_mobile_johnesteban_ap/src/widgets/comics_extras_slider.dart';

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/providers/ui_provider.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/screens/screens.dart';
-import 'package:prueba_mobile_johnesteban_ap/src/services/auth_service.dart';
-import 'package:prueba_mobile_johnesteban_ap/src/services/comics_service.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/themes/theme_light.dart';
+
+import 'src/services/services.dart';
 
 void main() => runApp(const AppState());
 
@@ -18,6 +18,8 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UiProvider()),
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => ComicsService()),
+        ChangeNotifierProvider(create: (_) => FavoritesComicsService()),
+        ChangeNotifierProvider(create: (_) => GetFavoritesService()),
       ],
       child: MyApp(),
     );

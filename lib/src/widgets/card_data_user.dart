@@ -48,7 +48,10 @@ class _TitleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 10, bottom: 30),
-      child: Text(title, style: Theme.of(context).textTheme.headline4),
+      child: Text(
+        title,
+        style: const TextStyle(color: ThemeDark.colorDard, fontSize: 35),
+      ),
     );
   }
 }

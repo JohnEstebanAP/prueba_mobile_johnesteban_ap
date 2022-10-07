@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:prueba_mobile_johnesteban_ap/src/services/services.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/widgets/widgets.dart';
-
-import '../services/comics_service.dart';
+import '../models/models.dart';
 import 'screens.dart';
 
 class FavoritesScreen extends StatelessWidget {
@@ -10,23 +10,15 @@ class FavoritesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final comicsService = Provider.of<ComicsService>(context);
+    final favoritesComicsServices =
+        Provider.of<FavoritesComicsService>(context);
 
-    if (comicsService.isLoding) return const LoadingScreen();
+    if (favoritesComicsServices.isLoding) return const LoadingScreen();
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          // Targetas principales
-          CardSwiper(comics: comicsService.comics),
-          //Slider de Comics
-          ComicSlider(
-            comic: comicsService.allComics,
-            title: 'Complete List',
-            onNextPage: () => comicsService.getnextComics(),
-          ),
-        ],
-      ),
+    return ComicSliderVertical(
+      comic: favoritesComicsServices.comics,
+      title: 'List of favorite comics',
+      onNextPage: () => {},
     );
   }
 }
