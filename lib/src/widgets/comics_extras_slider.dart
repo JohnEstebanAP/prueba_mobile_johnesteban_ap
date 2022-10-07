@@ -1,24 +1,25 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/models/comic.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/models/extras.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/services/comics_service.dart';
 
-class ComicVariantsSlider extends StatelessWidget {
+class ComicsExtrasSlider extends StatelessWidget {
   final String? title;
   final Comic comic;
   final Function onNextPage;
 
-  const ComicVariantsSlider(
+  const ComicsExtrasSlider(
       {super.key, required this.comic, this.title, required this.onNextPage});
 
   @override
   Widget build(BuildContext context) {
     final comicsServise = Provider.of<ComicsService>(context, listen: false);
-
+    //comicsServise.getCreatorFromComic(comic);
     return FutureBuilder(
-        future: comicsServise.getVariantsFromComic(comic),
+        future: (title! == 'Creators')
+            ? comicsServise.getCreatorFromComic(comic)
+            : comicsServise.getVariantsFromComic(comic),
         builder: (_, AsyncSnapshot<List<Extras>> snapshot) {
           if (!snapshot.hasData) {
             return Container(
@@ -84,6 +85,7 @@ class _ComicPoster extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 child: FadeInImage(
                   placeholder: const AssetImage('assets/no-image.jpg'),
+                  //  (extras.image == '')
                   image: NetworkImage(extras.image!),
                   width: 130,
                   height: 190,

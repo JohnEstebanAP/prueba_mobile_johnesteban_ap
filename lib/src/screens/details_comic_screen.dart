@@ -29,9 +29,9 @@ class DetailsComicScreen extends StatelessWidget {
                       onNextPage: () => {},
                     )
                   : const SizedBox(),
-              (comic.variants!.isNotEmpty)
-                  ? ComicVariantsSlider(
-                      title: 'Variants',
+              (comic.creators!.items!.isNotEmpty)
+                  ? ComicsExtrasSlider(
+                      title: 'Creators',
                       comic: comic,
                       onNextPage: () => {},
                     )

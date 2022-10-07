@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/models/comic.dart';
 import 'package:http/http.dart' as http;
+import 'package:prueba_mobile_johnesteban_ap/src/models/creators.dart';
+import 'package:prueba_mobile_johnesteban_ap/src/models/extras.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/widgets/toast.dart';
 import 'package:crypto/crypto.dart';
 
@@ -22,7 +24,8 @@ class ComicsService extends ChangeNotifier {
 
   List<Comic> comics = [];
   List<Comic> allComics = [];
-  Map<int, List<Comic>> _variants = {};
+  Map<int, List<Extras>> _variants = {};
+  Map<int, List<Extras>> _creators = {};
 
   //final List<Comic> comics = [];
   late Comic selectedComic;
@@ -37,10 +40,6 @@ class ComicsService extends ChangeNotifier {
     _curretpage = 0;
     loadComics();
     getnextComics();
-  }
-
-  Map<int, List<Comic>> get variants {
-    return _variants;
   }
 
   void hash(String _privateKey, String _apikey) {
@@ -68,6 +67,7 @@ class ComicsService extends ChangeNotifier {
         'offset': _curretpage.toString()
       },
     );
+
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -120,12 +120,12 @@ class ComicsService extends ChangeNotifier {
     }
   }
 
-  Future<List<Comic>> getVariantsFromComic(Comic comic) async {
+  Future<List<Extras>> getVariantsFromComic(Comic comic) async {
     if (_variants.containsKey(comic.id)) {
       return _variants[comic.id]!;
     }
 
-    List<Comic> allVariantsResponse = [];
+    List<Extras> allVariantsResponse = [];
 
     for (var i = 0; i < comic.variants!.length; i++) {
       List<String>? listUrlVariant = comic.variants![i].resourceUri?.split('/');
@@ -137,11 +137,47 @@ class ComicsService extends ChangeNotifier {
 
       comicMap['results'].forEach((value) {
         final Comic tempComic = Comic.fromMap(value);
-        allVariantsResponse.add(tempComic);
+        Extras extras = Extras();
+        extras.id = tempComic.id;
+        extras.title = tempComic.title;
+        extras.image =
+            '${tempComic.thumbnail!.path}/portrait_fantastic.${tempComic.thumbnail!.extension}';
+
+        allVariantsResponse.add(extras);
       });
       // _variants = [..._variants, ...allVariantsResponse];
     }
     _variants[comic.id!] = allVariantsResponse;
     return allVariantsResponse;
+  }
+
+  Future<List<Extras>> getCreatorFromComic(Comic comic) async {
+    if (_creators.containsKey(comic.id)) {
+      return _creators[comic.id]!;
+    }
+
+    List<Extras> allCreatorsResponse = [];
+
+    for (var i = 0; i < comic.creators!.items!.length; i++) {
+      List<String>? listUrlCreators =
+          comic.creators!.items![i].resourceUri?.split('/');
+      String idCreator = listUrlCreators![listUrlCreators.length - 1];
+
+      final response = await _getJsonData('/v1/public/creators/$idCreator');
+      final Map<String, dynamic> comicMap = json.decode(response)['data'];
+      comicMap['results'].forEach((value) {
+        // final Creators tempCreators = Creators.fromMap(value);
+
+        Extras extras = Extras();
+        extras.id = value["id"];
+        extras.title = value["fullName"];
+        extras.image =
+            '${value["thumbnail"]["path"]}/portrait_fantastic.${value["thumbnail"]["extension"]}';
+
+        allCreatorsResponse.add(extras);
+      });
+    }
+    _creators[comic.id!] = allCreatorsResponse;
+    return allCreatorsResponse;
   }
 }
