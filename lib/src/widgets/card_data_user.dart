@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:prueba_mobile_johnesteban_ap/src/themes/theme_light.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/widgets/widgets.dart';
 
 import '../providers/login_provider.dart';
@@ -13,7 +14,8 @@ class CardDataUser extends StatelessWidget {
 
   const CardDataUser({
     Key? key,
-    required this.title, required this.type,
+    required this.title,
+    required this.type,
   }) : super(key: key);
 
   @override
@@ -24,7 +26,9 @@ class CardDataUser extends StatelessWidget {
           _TitleCard(title: title),
           ChangeNotifierProvider(
             create: (_) => LoginFormProvider(),
-            child: _LoginForm(type: type,),
+            child: _LoginForm(
+              type: type,
+            ),
           ),
         ],
       ),
@@ -79,7 +83,6 @@ class _LoginForm extends StatelessWidget {
   }
 }
 
-
 class _TextFromFielPassword extends StatelessWidget {
   const _TextFromFielPassword({
     Key? key,
@@ -91,6 +94,7 @@ class _TextFromFielPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: const TextStyle(color: ThemeDark.colorDard),
       autocorrect: false,
       obscureText: true,
       keyboardType: TextInputType.emailAddress,
@@ -120,6 +124,7 @@ class _TextFromFieldEmail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: const TextStyle(color: ThemeDark.colorDard),
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecorations.authInputDecoration(

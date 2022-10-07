@@ -73,11 +73,14 @@ class _Description extends StatelessWidget {
         ));
   }
 
-  Text _description(BuildContext context) {
-    return Text(
-      comic.description ?? '',
-      textAlign: TextAlign.justify,
-      style: Theme.of(context).textTheme.subtitle1,
+  Container _description(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 15),
+      child: Text(
+        comic.description ?? '',
+        textAlign: TextAlign.justify,
+        style:  Theme.of(context).textTheme.subtitle1,
+      ),
     );
   }
 
