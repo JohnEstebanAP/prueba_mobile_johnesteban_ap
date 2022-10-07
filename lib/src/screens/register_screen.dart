@@ -16,10 +16,10 @@ class RegisterScreen extends StatelessWidget {
           child: Column(
             children: const [
               SizedBox(height: 250),
-              CardDataUser(title: 'Crear cuenta', type: 'register'),
+              CardDataUser(title: 'Create an account', type: 'register'),
               SizedBox(height: 50),
               TextButtonChangePage(
-                  nameNextPage: 'login', title: 'Ya tienes una cuenta?'),
+                  nameNextPage: 'login', title: 'Already have an account?'),
               SizedBox(height: 50)
             ],
           ),
