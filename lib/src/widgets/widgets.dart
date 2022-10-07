@@ -1,6 +1,5 @@
 export 'package:prueba_mobile_johnesteban_ap/src/widgets/background.dart';
 export 'package:prueba_mobile_johnesteban_ap/src/widgets/custom_navigatorbar.dart';
-export 'package:prueba_mobile_johnesteban_ap/src/widgets/comics_variants_slider.dart';
 export 'package:prueba_mobile_johnesteban_ap/src/widgets/comics_extras_slider.dart';
 export 'package:prueba_mobile_johnesteban_ap/src/widgets/poster_and_title.dart';
 export 'package:prueba_mobile_johnesteban_ap/src/widgets/CustomAppBar.dart';

@@ -7,10 +7,8 @@ import 'package:prueba_mobile_johnesteban_ap/src/services/comics_service.dart';
 class ComicsExtrasSlider extends StatelessWidget {
   final String? title;
   final Comic comic;
-  final Function onNextPage;
 
-  const ComicsExtrasSlider(
-      {super.key, required this.comic, this.title, required this.onNextPage});
+  const ComicsExtrasSlider({super.key, required this.comic, this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -76,21 +74,17 @@ class _ComicPoster extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
-          GestureDetector(
-            onTap: () =>
-                Navigator.pushNamed(context, 'details', arguments: extras),
-            child: Hero(
-              tag: extras.id!,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: FadeInImage(
-                  placeholder: const AssetImage('assets/no-image.jpg'),
-                  //  (extras.image == '')
-                  image: NetworkImage(extras.image!),
-                  width: 130,
-                  height: 190,
-                  fit: BoxFit.cover,
-                ),
+          Hero(
+            tag: extras.id!,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: FadeInImage(
+                placeholder: const AssetImage('assets/no-image.jpg'),
+                //  (extras.image == '')
+                image: NetworkImage(extras.image!),
+                width: 130,
+                height: 190,
+                fit: BoxFit.cover,
               ),
             ),
           ),
