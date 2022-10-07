@@ -74,6 +74,8 @@ class GetFavoritesService extends ChangeNotifier {
       return favoritesComics;
     }
 
+    favoritesComics = [];
+
     for (var i = 0; i < comics.length; i++) {
       final response = await _getJsonData('$_bodyUrl/${comics[i].toString()}');
       final Map<String, dynamic> comicMap = json.decode(response)['data'];

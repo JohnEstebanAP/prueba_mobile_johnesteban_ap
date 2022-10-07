@@ -27,6 +27,8 @@ class FavoritesComicsService extends ChangeNotifier {
     isLoding = true;
     notifyListeners();
 
+    favoriteComic.comics = [];
+
     var userId = await storage.read(key: 'token') ?? '';
     final url =
         Uri.https(_baseUrl, 'FavoritesComics/$userId.json', {'auth': userId});
@@ -35,12 +37,20 @@ class FavoritesComicsService extends ChangeNotifier {
 
     final Map<String, dynamic> favoritesComicsMap = json.decode(resp.body);
 
+    if (favoritesComicsMap['comics'] == null) {
+      isLoding = false;
+      notifyListeners();
+      return comics;
+    }
+
     favoriteComic = FavoritesComics.fromMap(favoritesComicsMap);
 
-    if (favoriteComic.comics.length != comics.length) {
-      comics =
-          await getFavoritesService.getFavoritesComic(favoriteComic.comics);
-    }
+    //if (favoriteComic.comics.length != comics.length) {
+    comics = [];
+    comics = await getFavoritesService.getFavoritesComic(favoriteComic.comics);
+    //}
+    print('comics: ${comics.length}');
+    print('fa: ${favoriteComic.comics.length}');
 
     refres = false;
     isLoding = false;

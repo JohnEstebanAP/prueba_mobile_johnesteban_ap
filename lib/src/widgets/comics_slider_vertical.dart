@@ -23,7 +23,6 @@ class _MovieSliderState extends State<ComicSliderVertical> {
     scrollController.addListener(() {
       if (scrollController.position.pixels >=
           scrollController.position.maxScrollExtent - 400) {
-        print('scroll ${scrollController.position.maxScrollExtent}');
         widget.onNextPage();
       }
     });
@@ -60,8 +59,8 @@ class _MovieSliderState extends State<ComicSliderVertical> {
               controller: scrollController,
               scrollDirection: Axis.vertical,
               itemCount: widget.comic.length,
-              itemBuilder: (_, int index) => _ComicPoster(
-                  widget.comic[index], (widget.comic[index].id! + 200000)),
+              itemBuilder: (_, int index) =>
+                  _ComicPoster(widget.comic[index], (widget.comic[index].id!)),
             ),
           ),
         ],
