@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/providers/ui_provider.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/screens/screens.dart';
+import 'package:prueba_mobile_johnesteban_ap/src/services/creator_service.dart';
+import 'package:prueba_mobile_johnesteban_ap/src/services/variants_service.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/themes/theme_light.dart';
 
 import 'src/services/services.dart';
@@ -19,7 +21,11 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => ComicsService()),
         ChangeNotifierProvider(create: (_) => FavoritesComicsService()),
-        ChangeNotifierProvider(create: (_) => GetFavoritesService()),
+        ChangeNotifierProvider(create: (_) => FavoritesService()),
+        ChangeNotifierProvider(create: (_) => StoriesService()),
+        ChangeNotifierProvider(create: (_) => CharacterService()),
+        ChangeNotifierProvider(create: (_) => CreatorService()),
+        ChangeNotifierProvider(create: (_) => VariantsService()),
       ],
       child: MyApp(),
     );

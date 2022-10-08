@@ -11,7 +11,7 @@ import 'package:prueba_mobile_johnesteban_ap/src/services/services.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/widgets/toast.dart';
 import 'package:crypto/crypto.dart';
 
-class GetFavoritesService extends ChangeNotifier {
+class FavoritesService extends ChangeNotifier {
   final String _baseUrl = 'gateway.marvel.com';
   final String _bodyUrl = '/v1/public/comics';
   final String _apikey = '91ef740484931a27809c93d3d4cc5cec';

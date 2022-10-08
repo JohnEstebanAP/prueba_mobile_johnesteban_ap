@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/models/models.dart';
 import 'package:http/http.dart' as http;
-import 'package:prueba_mobile_johnesteban_ap/src/services/get_favorites_services.dart';
+import 'package:prueba_mobile_johnesteban_ap/src/services/favorites_services.dart';
 
 class FavoritesComicsService extends ChangeNotifier {
-  GetFavoritesService getFavoritesService = GetFavoritesService();
+  FavoritesService favoritesService = FavoritesService();
 
   final String _baseUrl = 'prueba-mobile-flutter-default-rtdb.firebaseio.com';
 
@@ -45,12 +45,8 @@ class FavoritesComicsService extends ChangeNotifier {
 
     favoriteComic = FavoritesComics.fromMap(favoritesComicsMap);
 
-    //if (favoriteComic.comics.length != comics.length) {
     comics = [];
-    comics = await getFavoritesService.getFavoritesComic(favoriteComic.comics);
-    //}
-    print('comics: ${comics.length}');
-    print('fa: ${favoriteComic.comics.length}');
+    comics = await favoritesService.getFavoritesComic(favoriteComic.comics);
 
     refres = false;
     isLoding = false;

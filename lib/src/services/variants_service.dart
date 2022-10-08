@@ -3,39 +3,25 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/models/comic.dart';
 import 'package:http/http.dart' as http;
+import 'package:prueba_mobile_johnesteban_ap/src/models/extras.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/widgets/toast.dart';
 import 'package:crypto/crypto.dart';
 
-class ComicsService extends ChangeNotifier {
+class VariantsService extends ChangeNotifier {
   final String _baseUrl = 'gateway.marvel.com';
-  final String _bodyUrl = '/v1/public/comics';
   final String _apikey = '91ef740484931a27809c93d3d4cc5cec';
   final String _privateKey = 'e0820a51f547642261e4d1f53bbf0423a4bcc39b';
+  final String _bodyUrl = '/v1/public/comics';
 
   //final String _apikey2 = 'ab172c13e5eadcee42116f385af2efc5';
   //final String _privateKey2 = '3b861a8e965febcdd5e101e398539806dc7efb1a';
 
   String _hash = '';
   String _ts = '';
-  int _curretpage = 0;
+  final int _curretpage = 0;
+  final Map<int, List<Extras>> _variants = {};
 
-  List<Comic> comics = [];
-  List<Comic> allComics = [];
-
-  //final List<Comic> comics = [];
-  late Comic selectedComic;
-
-  //final storage = const FlutterSecureStorage();
-
-  bool isLoding = true;
   bool isLodingSlider = false;
-  bool isSaving = false;
-
-  ComicsService() {
-    _curretpage = 0;
-    loadComics();
-    getnextComics();
-  }
 
   void hash(String privateKey, String apikey) {
     ts();
@@ -74,44 +60,33 @@ class ComicsService extends ChangeNotifier {
     }
   }
 
-  Future<List<Comic>> loadComics() async {
-    isLoding = true;
-    notifyListeners();
+  Future<List<Extras>> getVariantsFromComic(Comic comic) async {
+    if (_variants.containsKey(comic.id)) {
+      return _variants[comic.id]!;
+    }
 
-    final response = await _getJsonData(_bodyUrl);
+    List<Extras> allVariantsResponse = [];
 
-    final Map<String, dynamic> comicMap = json.decode(response)['data'];
+    for (var i = 0; i < comic.variants!.length; i++) {
+      List<String>? listUrlVariant = comic.variants![i].resourceUri?.split('/');
+      String idVariant = listUrlVariant![listUrlVariant.length - 1];
 
-    comicMap['results'].forEach((value) {
-      final Comic tempComic = Comic.fromMap(value);
-      comics.add(tempComic);
-    });
-
-    isLoding = false;
-
-    notifyListeners();
-    return comics;
-  }
-
-  getnextComics() async {
-    if (isLodingSlider == false) {
-      isLodingSlider = true;
-
-      final response = await _getJsonData(_bodyUrl);
+      final response = await _getJsonData('$_bodyUrl/$idVariant');
 
       final Map<String, dynamic> comicMap = json.decode(response)['data'];
 
-      List<Comic> allComicsResponse = [];
-
       comicMap['results'].forEach((value) {
         final Comic tempComic = Comic.fromMap(value);
-        allComicsResponse.add(tempComic);
-      });
+        Extras extras = Extras();
+        extras.id = tempComic.id;
+        extras.title = tempComic.title;
+        extras.image =
+            '${tempComic.thumbnail!.path}/portrait_fantastic.${tempComic.thumbnail!.extension}';
 
-      allComics = [...allComics, ...allComicsResponse];
-      _curretpage += 20;
-      isLodingSlider = false;
-      notifyListeners();
+        allVariantsResponse.add(extras);
+      });
     }
+    _variants[comic.id!] = allVariantsResponse;
+    return allVariantsResponse;
   }
 }

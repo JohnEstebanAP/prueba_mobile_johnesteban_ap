@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/models/comic.dart';
 import 'package:http/http.dart' as http;
+import 'package:prueba_mobile_johnesteban_ap/src/models/extras.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/widgets/toast.dart';
 import 'package:crypto/crypto.dart';
 
-class ComicsService extends ChangeNotifier {
+class CreatorService extends ChangeNotifier {
   final String _baseUrl = 'gateway.marvel.com';
-  final String _bodyUrl = '/v1/public/comics';
   final String _apikey = '91ef740484931a27809c93d3d4cc5cec';
   final String _privateKey = 'e0820a51f547642261e4d1f53bbf0423a4bcc39b';
 
@@ -17,25 +17,10 @@ class ComicsService extends ChangeNotifier {
 
   String _hash = '';
   String _ts = '';
-  int _curretpage = 0;
+  final int _curretpage = 0;
+  final Map<int, List<Extras>> _creators = {};
 
-  List<Comic> comics = [];
-  List<Comic> allComics = [];
-
-  //final List<Comic> comics = [];
-  late Comic selectedComic;
-
-  //final storage = const FlutterSecureStorage();
-
-  bool isLoding = true;
   bool isLodingSlider = false;
-  bool isSaving = false;
-
-  ComicsService() {
-    _curretpage = 0;
-    loadComics();
-    getnextComics();
-  }
 
   void hash(String privateKey, String apikey) {
     ts();
@@ -74,44 +59,33 @@ class ComicsService extends ChangeNotifier {
     }
   }
 
-  Future<List<Comic>> loadComics() async {
-    isLoding = true;
-    notifyListeners();
-
-    final response = await _getJsonData(_bodyUrl);
-
-    final Map<String, dynamic> comicMap = json.decode(response)['data'];
-
-    comicMap['results'].forEach((value) {
-      final Comic tempComic = Comic.fromMap(value);
-      comics.add(tempComic);
-    });
-
-    isLoding = false;
-
-    notifyListeners();
-    return comics;
-  }
-
-  getnextComics() async {
-    if (isLodingSlider == false) {
-      isLodingSlider = true;
-
-      final response = await _getJsonData(_bodyUrl);
-
-      final Map<String, dynamic> comicMap = json.decode(response)['data'];
-
-      List<Comic> allComicsResponse = [];
-
-      comicMap['results'].forEach((value) {
-        final Comic tempComic = Comic.fromMap(value);
-        allComicsResponse.add(tempComic);
-      });
-
-      allComics = [...allComics, ...allComicsResponse];
-      _curretpage += 20;
-      isLodingSlider = false;
-      notifyListeners();
+  Future<List<Extras>> getCreatorFromComic(Comic comic) async {
+    if (_creators.containsKey(comic.id)) {
+      return _creators[comic.id]!;
     }
+
+    List<Extras> allCreatorsResponse = [];
+
+    for (var i = 0; i < comic.creators!.items!.length; i++) {
+      List<String>? listUrlCreators =
+          comic.creators!.items![i].resourceUri?.split('/');
+      String idCreator = listUrlCreators![listUrlCreators.length - 1];
+
+      final response = await _getJsonData('/v1/public/creators/$idCreator');
+      final Map<String, dynamic> comicMap = json.decode(response)['data'];
+      comicMap['results'].forEach((value) {
+        // final Creators tempCreators = Creators.fromMap(value);
+
+        Extras extras = Extras();
+        extras.id = value["id"];
+        extras.title = value["fullName"];
+        extras.image =
+            '${value["thumbnail"]["path"]}/portrait_fantastic.${value["thumbnail"]["extension"]}';
+
+        allCreatorsResponse.add(extras);
+      });
+    }
+    _creators[comic.id!] = allCreatorsResponse;
+    return allCreatorsResponse;
   }
 }

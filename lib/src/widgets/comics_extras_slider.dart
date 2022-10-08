@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/models/comic.dart';
 import 'package:prueba_mobile_johnesteban_ap/src/models/extras.dart';
-import 'package:prueba_mobile_johnesteban_ap/src/services/comics_service.dart';
+import 'package:prueba_mobile_johnesteban_ap/src/services/character_service.dart';
+import 'package:prueba_mobile_johnesteban_ap/src/services/creator_service.dart';
+import 'package:prueba_mobile_johnesteban_ap/src/services/stories_service.dart';
+import 'package:prueba_mobile_johnesteban_ap/src/services/variants_service.dart';
 
 class ComicsExtrasSlider extends StatelessWidget {
   final String? title;
@@ -12,20 +15,23 @@ class ComicsExtrasSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final comicsServise = Provider.of<ComicsService>(context, listen: false);
-    //comicsServise.getCreatorFromComic(comic);
+    final storiesServices = Provider.of<StoriesService>(context, listen: false);
+    final characterServices = Provider.of<CharacterService>(context, listen: false);
+    final creatorServices = Provider.of<CreatorService>(context, listen: false);
+    final variantsServices = Provider.of<VariantsService>(context, listen: false);
+
     return FutureBuilder(
         future: (title! == 'Creators')
-            ? comicsServise.getCreatorFromComic(comic)
+            ? creatorServices.getCreatorFromComic(comic)
             : (title! == 'Characters')
-            ? comicsServise.getCharactersFromComic(comic)
-            : (title == 'Stories')
-            ? comicsServise.getStoriesFromComic(comic)
-            : comicsServise.getVariantsFromComic(comic),
+                ? characterServices.getCharactersFromComic(comic)
+                : (title == 'Stories')
+                    ? storiesServices.getStoriesFromComic(comic)
+                    : variantsServices.getVariantsFromComic(comic),
         builder: (_, AsyncSnapshot<List<Extras>> snapshot) {
           if (!snapshot.hasData) {
             return Container(
-              constraints: BoxConstraints(maxWidth: 150),
+              constraints: const BoxConstraints(maxWidth: 150),
               height: 180,
               child: const CupertinoActivityIndicator(),
             );
@@ -33,7 +39,7 @@ class ComicsExtrasSlider extends StatelessWidget {
 
           final List<Extras> extras = snapshot.data!;
 
-          return Container(
+          return SizedBox(
             width: double.infinity,
             height: 260,
             child: Column(
@@ -51,9 +57,8 @@ class ComicsExtrasSlider extends StatelessWidget {
                     physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     itemCount: extras.length,
-                    itemBuilder: (_, int index) =>
-                        _ComicPoster(
-                            extras[index], (extras[index].id! + 200000)),
+                    itemBuilder: (_, int index) => _ComicPoster(
+                        extras[index], (extras[index].id! + 200000)),
                   ),
                 ),
               ],
